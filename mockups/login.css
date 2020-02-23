@@ -1,0 +1,90 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    font-family: monospace;
+    color: #778899;
+}
+
+.login-container {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 35% 65%;
+    grid-template-areas:
+        "header"
+        "content";
+}
+
+#login-header {
+    grid-area: header;
+
+    display: grid;
+}
+
+#login-header-brand {
+    display: grid;
+    grid-template-rows: 50% 25% 25%;
+    grid-template-areas:
+        "logo"
+        "name"
+        "phrase";
+
+    justify-items: center;
+    align-items: center;
+}
+
+#login-header-brand-logo {
+    grid-area: logo;
+    color: lightgreen;
+    font-size: 48px;
+}
+
+#login-header-brand-name {
+    grid-area: name;
+    font-size: 32px;
+}
+
+#login-header-brand-phrase {
+    grid-area: phrase;
+    align-self: flex-start;
+    font-size: 16px;
+}
+
+#login-content {
+    display: grid;
+
+    margin: 0 30px 80px;
+}
+
+#login-content-form {
+    height: 100%;
+    display: grid;
+    grid-template-areas:
+        "name"
+        "email"
+        "password"
+        "cpassword"
+        "submit";
+
+    grid-row-gap: 7%;
+}
+
+.login-content-form-textbox,
+.login-content-form-submit {
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
+.login-content-form-textbox:focus {
+    outline: none;
+    background-color: #eee;
+}
+
+.login-content-form-submit {
+    background-color: lightgreen;
+    color: #fff;
+    border: none;
+}
