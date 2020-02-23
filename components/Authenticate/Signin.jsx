@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { StyleSheet, TextInput, Text, Button, View } from 'react-native';
 
-import { StateContext } from '../../StateContext.js';
+import { StateContext } from '../../context/StateContext.js';
 
 export default function Signin(props) {
 

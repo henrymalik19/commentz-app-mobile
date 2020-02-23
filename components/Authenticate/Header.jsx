@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 
-import { StateContext } from '../../StateContext'
+import { StateContext } from '../../context/StateContext.js';
 
 export default function Header() {
 

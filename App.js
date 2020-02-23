@@ -6,7 +6,7 @@ import Authenticate from './components/Authenticate/Authenticate.jsx';
 import Chat from './components/Chat/Chat.jsx';
 
 // IMPORT CONTEXT
-import { StateContextProvider, StateContextConsumer } from './StateContext'
+import { StateContextProvider, StateContextConsumer } from './context/StateContext.js';
 
 export default function App() {
 
