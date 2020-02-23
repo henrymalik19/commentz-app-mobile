@@ -1,17 +1,22 @@
-import React from 'react';
-import { StyleSheet, TextInput, Text, Button, KeyboardAvoidingView } from 'react-native';
+import React, { useContext } from 'react';
+import { StyleSheet, TextInput, Text, Button, View } from 'react-native';
+
+import { StateContext } from '../../StateContext.js';
 
 export default function Signup(props) {
+
+    const context = useContext(StateContext);
+
     return (
-        <KeyboardAvoidingView style={styles.container}>
+        <View style={styles.container}>
             <TextInput placeholder="Name" style={styles.inputBox} clearTextOnFocus></TextInput>
             <TextInput placeholder="Email" style={styles.inputBox}></TextInput>
             <TextInput placeholder="Password" style={styles.inputBox} secureTextEntry></TextInput>
             <TextInput placeholder="Confirm Password" style={styles.inputBox} secureTextEntry></TextInput>
-            <Button title={'Sign Up'} color='#90EE90' style={styles.button}></Button>
+            <Button title={'Sign Up'} color='#90EE90' style={styles.button} onPress={() => context.handleAuth({ type: 'signup' })}></Button>
             <Text style={styles.text}>Have An Account?</Text>
             <Button title={'Sign In'} color='#90EE90' onPress={props.changeView}></Button>
-        </KeyboardAvoidingView>
+        </View>
     )
 }
 

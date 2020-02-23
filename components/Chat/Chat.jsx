@@ -1,11 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-export default function Home() {
+// IMPORT COMPONENTS
+import Header from './Header.jsx';
+
+export default function Chat() {
     return (
-        <KeyboardAvoidingView style={styles.container}>
+        <View style={styles.container}>
+            <Header />
             <Text>Home</Text>
-        </KeyboardAvoidingView>
+        </View>
     )
 }
 

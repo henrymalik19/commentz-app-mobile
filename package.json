@@ -28,7 +28,7 @@
   "private": true,
   "name": "commentz-fe",
   "version": "1.0.0",
-  "description": "A Chat App Using React Native & Websockets",
+  "description": "A Mobile App for the Commentz Messaging Application",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/henrymalik19/commentz-mobile.git"
@@ -36,6 +36,7 @@
   "author": "Malik Henry",
   "license": "MIT",
   "bugs": {
+    "type": "git",
     "url": "https://github.com/henrymalik19/commentz-mobile/issues"
   },
   "homepage": "https://github.com/henrymalik19/commentz-mobile#readme"
