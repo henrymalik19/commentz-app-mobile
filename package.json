@@ -28,7 +28,7 @@
     "@babel/core": "^7.0.0"
   },
   "private": true,
-  "name": "commentz-fe",
+  "name": "commentz-app-mobile",
   "version": "1.0.0",
   "description": "A Mobile App for the Commentz Messaging Application",
   "repository": {

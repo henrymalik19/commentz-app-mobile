@@ -1,3 +1,5 @@
+import faker from 'faker';
+
 export default function generateUserData(num) {
 
     let data = []

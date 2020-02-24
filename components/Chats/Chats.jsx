@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet, FlatList, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Chat from './Chat.jsx';
@@ -11,7 +12,7 @@ const Stack = createStackNavigator();
 function List({ navigation }) {
 
     return (
-    <View style={styles.container}>
+    <View>
         <FlatList
             data={generateUserData(20)}
             renderItem={
