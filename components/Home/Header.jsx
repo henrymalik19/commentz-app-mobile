@@ -1,28 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
-import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { StyleSheet, Text, View } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
-export default function Header(props) {
-
-    const pressHandler = () => {
-        alert('pressed')
-    }
+export default function Header() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.topBar}>
-                <MaterialIcons name="menu" style={styles.topBarIcons}></MaterialIcons>
-                <Text style={styles.topBarName}>Commentz</Text>
-                <MaterialIcons name="search" style={styles.topBarIcons}></MaterialIcons>
-            </View>
-            <View style={styles.bottomBar}>
-                <TouchableWithoutFeedback style={styles.bottomBarTouch} onPress={() => props.changeTab('user')}>
-                    <FontAwesome name="user" style={props.currentTab === 'user' ? styles.bottomBarActive : styles.bottomBarInactive}></FontAwesome>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback style={styles.bottomBarTouch} onPress={() => props.changeTab('group')}>
-                    <FontAwesome name="group" style={props.currentTab === 'group' ? styles.bottomBarActive : styles.bottomBarInactive}></FontAwesome>
-                </TouchableWithoutFeedback>
-            </View>
+            <MaterialIcons name="menu" style={styles.Icons}></MaterialIcons>
+            <Text style={styles.Name}>Commentz</Text>
+            <MaterialIcons name="search" style={styles.Icons}></MaterialIcons>
         </View>
     )
 }
@@ -30,14 +16,10 @@ export default function Header(props) {
 
 const styles = StyleSheet.create({
     container: {
-        height: 200,
-
-    },
-    topBar: {
-        flex: 1,
+        height: 75,
         flexDirection: 'row'
     },
-    topBarName: {
+    Name: {
         flex: 3,
         textAlign: 'center',
         textAlignVertical: 'center',
@@ -45,34 +27,13 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
         fontFamily: 'monospace',
-        color: 'lightslategrey'
+        color: 'lightslategrey',
     },
-    topBarIcons: {
+    Icons: {
         flex: 1,
         textAlign: 'center',
         textAlignVertical: 'center',
         fontSize: 30,
         color: 'lightgrey'
-    },
-    bottomBar: {
-        flex: 1,
-        flexDirection: 'row'
-    },
-    bottomBarTouch: {
-        flex: 1
-    },
-    bottomBarInactive: {
-        flex: 1,
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        fontSize: 30,
-        color: 'lightgrey'
-    },
-    bottomBarActive: {
-        flex: 1,
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        fontSize: 30,
-        color: 'lightgreen'
     }
 });

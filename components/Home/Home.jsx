@@ -3,21 +3,18 @@ import { StyleSheet, Text, View } from 'react-native';
 
 // IMPORT COMPONENTS
 import Header from './Header.jsx';
-import UserList from './UserList.jsx';
-import RoomList from './RoomList.jsx';
+import Footer from './Footer.jsx';
+import UserChatList from './UserChatList.jsx';
+import RoomChatList from './RoomChatList.jsx';
 
 export default function Home() {
     const [currentTab, setCurrentTab] = useState('user');
 
-    const changeTab = () => {
-        // setCurrentTab(e)
-        alert('pressed')
-    }
-
     return (
         <View style={styles.container}>
-            <Header currentTab={currentTab} changeTab={(val) => setCurrentTab(val)} />
-            {currentTab === 'user' ? <UserList /> : <RoomList />}
+            <Header />
+            {currentTab === 'user' ? <UserChatList /> : <RoomChatList />}
+            <Footer currentTab={currentTab} changeTab={(val) => setCurrentTab(val)} />
         </View>
     )
 }
@@ -25,8 +22,6 @@ export default function Home() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 30,
-        // marginLeft: -5,
-        // marginEnd: -5
+        marginTop: 30
     }
 })
