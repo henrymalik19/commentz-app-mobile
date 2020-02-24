@@ -3,7 +3,7 @@ import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 
 // COMPONENT IMPORTS
 import Authenticate from './components/Authenticate/Authenticate.jsx';
-import Chat from './components/Chat/Chat.jsx';
+import Home from './components/Home/Home.jsx';
 
 // IMPORT CONTEXT
 import { StateContextProvider, StateContextConsumer } from './context/StateContext.js';
@@ -17,7 +17,7 @@ export default function App() {
         <StateContextConsumer>
           {
             context => (
-              context.authd === false ? <Authenticate /> : <Chat />
+              context.authd === false ? <Authenticate /> : <Home />
             )
           }
         </StateContextConsumer>
