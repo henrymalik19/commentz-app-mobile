@@ -1,27 +1,44 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { FontAwesome } from '@expo/vector-icons';
 
 // IMPORT COMPONENTS
-import Header from './Header.jsx';
-import Footer from './Footer.jsx';
-import UserChatList from './UserChatList.jsx';
-import RoomChatList from './RoomChatList.jsx';
+import Chats from '../Chats/Chats.jsx';
+import Rooms from '../Rooms/Rooms.jsx';
+
+const Tab = createBottomTabNavigator();
 
 export default function Home() {
-    const [currentTab, setCurrentTab] = useState('user');
 
     return (
-        <View style={styles.container}>
-            <Header />
-            {currentTab === 'user' ? <UserChatList /> : <RoomChatList />}
-            <Footer currentTab={currentTab} changeTab={(val) => setCurrentTab(val)} />
-        </View>
+        <NavigationContainer>
+            <Tab.Navigator
+                tabBarOptions={{
+                    showLabel: false,
+                    activeTintColor: 'lightgreen',
+                    inactiveTintColor: 'lightgrey'
+                }}
+                screenOptions={({ route }) => ({
+                    tabBarIcon: ({ color, size }) => {
+                        switch (route.name) {
+                            case 'Chats':
+                                return <FontAwesome name="user" size={size} color={color}></FontAwesome>
+                            case 'Rooms':
+                                return <FontAwesome name="group" size={size} color={color}></FontAwesome>
+                        }
+                    },
+                })}
+            >
+                <Tab.Screen
+                    name='Chats'
+                    component={Chats}
+                />
+                <Tab.Screen
+                    name='Rooms'
+                    component={Rooms}
+                />
+            </Tab.Navigator>
+        </NavigationContainer>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: 30
-    }
-})
