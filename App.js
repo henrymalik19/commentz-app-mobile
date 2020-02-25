@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 // COMPONENT IMPORTS
 import Authenticate from './components/Authenticate/Authenticate.jsx';
@@ -13,7 +13,7 @@ export default function App() {
 
   return (
     <StateContextProvider>
-      <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset='-200' style={styles.container}>
+      <View style={styles.container}>
         <StateContextConsumer>
           {
             context => (
@@ -21,7 +21,7 @@ export default function App() {
             )
           }
         </StateContextConsumer>
-      </KeyboardAvoidingView>
+      </View>
     </StateContextProvider>
   );
 }
