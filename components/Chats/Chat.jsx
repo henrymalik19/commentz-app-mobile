@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
     },
     leftAvatar: {
         width: 50,
-        height: 50
+        height: 50,
+        borderRadius: 25
     },
     center: {
         flex: 4,

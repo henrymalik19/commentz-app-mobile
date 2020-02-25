@@ -15,9 +15,12 @@ export default function Home() {
         <NavigationContainer>
             <Tab.Navigator
                 tabBarOptions={{
+                    style: {
+                        borderTopColor: '#fff'
+                    },
                     showLabel: false,
                     activeTintColor: 'lightgreen',
-                    inactiveTintColor: 'lightgrey'
+                    inactiveTintColor: 'lightgrey',
                 }}
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ color, size }) => {

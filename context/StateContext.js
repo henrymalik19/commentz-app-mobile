@@ -23,27 +23,27 @@ const StateContextProvider = (props) => {
         }
     });
 
-    useEffect(() => {
-        Keyboard.addListener('keyboardDidShow', () => {
-            setState({
-                ...state,
-                keyboardOpen: true
-            })
-        });
+    // useEffect(() => {
+    //     Keyboard.addListener('keyboardDidShow', () => {
+    //         setState({
+    //             ...state,
+    //             keyboardOpen: true
+    //         })
+    //     });
 
-        Keyboard.addListener('keyboardDidHide', () => {
-            setState({
-                ...state,
-                keyboardOpen: false
-            })
-        })
+    //     Keyboard.addListener('keyboardDidHide', () => {
+    //         setState({
+    //             ...state,
+    //             keyboardOpen: false
+    //         })
+    //     })
 
-        return (() => {
-            Keyboard.removeAllListeners('keyBoardDidShow');
-            Keyboard.removeAllListeners('keyBoardDidHide');
-        })
+    //     return (() => {
+    //         Keyboard.removeAllListeners('keyBoardDidShow');
+    //         Keyboard.removeAllListeners('keyBoardDidHide');
+    //     })
 
-    }, []);
+    // }, []);
 
     return (
         <StateContext.Provider value={state}>

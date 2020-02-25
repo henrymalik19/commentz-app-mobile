@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Chat from './Chat.jsx';
 import ChatDetail from './ChatDetail.jsx';
 
-import generateUserData from '../../utils/fakeData.js';
+import { generateUserData } from '../../utils/fakeData.js';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +14,7 @@ function List({ navigation }) {
     return (
         <View>
             <FlatList
+                style={{ backgroundColor: '#fff' }}
                 data={generateUserData(20)}
                 renderItem={
                     ({ item }) => (
