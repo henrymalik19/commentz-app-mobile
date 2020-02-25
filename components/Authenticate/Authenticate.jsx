@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 
 import Header from './Header.jsx';
 import Signup from './Signup.jsx';
@@ -9,10 +9,10 @@ export default function Authenticate() {
     let [view, setView] = useState('signin');
 
     return (
-        <View style={{ flex: 1 }} >
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding' keyboardVerticalOffset='-200' >
             <Header />
             {view === 'signin' ? <Signin changeView={() => setView('signup')} /> : <Signup changeView={() => setView('signin')} />}
-        </ View>
+        </ KeyboardAvoidingView>
     )
 
 }

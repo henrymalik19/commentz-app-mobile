@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, Image, TouchableWithoutFeedback, View } from 'react-native';
 
-export default function UserChatListItem(props) {
+export default function Chat(props) {
     return (
-        <TouchableWithoutFeedback onPress={() => alert('pressed')}>
+        <TouchableWithoutFeedback onPress={props.onPress}>
             <View style={styles.container}>
                 <View style={styles.left}>
                     <Image
@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
     },
     leftAvatar: {
         width: 50,
-        height: 50
+        height: 50,
+        borderRadius: 25
     },
     center: {
         flex: 4,

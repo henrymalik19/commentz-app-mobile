@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function RoomChatList() {
+export default function Rooms() {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Room List View</Text>
