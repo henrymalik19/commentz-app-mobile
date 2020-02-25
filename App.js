@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { Keyboard, StyleSheet, View } from 'react-native';
 
 // COMPONENT IMPORTS
 import Authenticate from './components/Authenticate/Authenticate.jsx';
@@ -10,6 +10,23 @@ import { StateContextProvider, StateContextConsumer } from './context/StateConte
 
 export default function App() {
 
+  let [keyBoardOpen, setKeyBoardOpen] = useState(false);
+
+  useEffect(() => {
+      Keyboard.addListener('keyboardDidShow', () => {
+          setKeyBoardOpen(true)
+      });
+
+      Keyboard.addListener('keyboardDidHide', () => {
+          setKeyBoardOpen(false)
+      })
+
+      return (() => {
+          Keyboard.removeAllListeners('keyBoardDidShow');
+          Keyboard.removeAllListeners('keyBoardDidHide');
+      })
+
+  }, []);
 
   return (
     <StateContextProvider>
@@ -17,7 +34,7 @@ export default function App() {
         <StateContextConsumer>
           {
             context => (
-              context.authd === false ? <Authenticate /> : <Home />
+              context.authd === false ? <Authenticate keyboardOpen={keyBoardOpen}/> : <Home />
             )
           }
         </StateContextConsumer>
