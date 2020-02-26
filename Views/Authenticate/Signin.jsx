@@ -1,6 +1,8 @@
-import React, { useState, useContext } from './node_modules/react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, TextInput, Text, Button, View } from 'react-native';
-import validator from './node_modules/validator';
+import validator from 'validator';
+
+import Header from './Header.jsx';
 
 import { StateContext } from '../../context/StateContext.js';
 
@@ -75,6 +77,7 @@ export default function Signin(props) {
 
     return (
         <View style={styles.container}>
+            <Header />
             {errorMsg('email')}
             <TextInput
                 placeholder="Email"
@@ -110,7 +113,7 @@ export default function Signin(props) {
             <Button
                 title={'Sign Up'}
                 color='#90EE90'
-                onPress={props.changeView}
+                onPress={() => props.navigation.navigate('signup')}
             />
         </View>
     )

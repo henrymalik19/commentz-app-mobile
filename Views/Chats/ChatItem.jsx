@@ -1,4 +1,4 @@
-import React from './node_modules/react';
+import React from 'react';
 import { StyleSheet, Text, Image, TouchableWithoutFeedback, View } from 'react-native';
 
 export default function ChatItem(props) {

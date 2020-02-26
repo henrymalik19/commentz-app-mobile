@@ -1,4 +1,4 @@
-import React from './node_modules/react';
+import React from 'react';
 import { FlatList, View } from 'react-native';
 
 import ChatItem from './ChatItem.jsx';
