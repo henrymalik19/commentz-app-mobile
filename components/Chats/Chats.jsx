@@ -43,7 +43,7 @@ export default function Chats() {
                 headerTitleStyle: {
                     color: 'lightslategrey',
                     fontWeight: 'bold',
-                    textTransform: 'capitalize'
+                    textTransform: 'uppercase'
                 },
                 headerTintColor: 'lightgrey'
             }}

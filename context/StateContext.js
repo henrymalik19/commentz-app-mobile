@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
 import { Keyboard } from 'react-native';
 
 const StateContext = createContext();
@@ -14,6 +14,7 @@ const StateContextProvider = (props) => {
                     break;
                 case 'signup':
                     // SIGN IN LOGIC HERE
+                    console.log(authObj);
                     break;
             }
             setState({
@@ -22,28 +23,6 @@ const StateContextProvider = (props) => {
             });
         }
     });
-
-    // useEffect(() => {
-    //     Keyboard.addListener('keyboardDidShow', () => {
-    //         setState({
-    //             ...state,
-    //             keyboardOpen: true
-    //         })
-    //     });
-
-    //     Keyboard.addListener('keyboardDidHide', () => {
-    //         setState({
-    //             ...state,
-    //             keyboardOpen: false
-    //         })
-    //     })
-
-    //     return (() => {
-    //         Keyboard.removeAllListeners('keyBoardDidShow');
-    //         Keyboard.removeAllListeners('keyBoardDidHide');
-    //     })
-
-    // }, []);
 
     return (
         <StateContext.Provider value={state}>
