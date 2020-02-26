@@ -7,20 +7,41 @@ const StateContextProvider = (props) => {
     let [state, setState] = useState({
         keyboardOpen: false,
         authd: false,
+        currentUser: {
+            id: 1,
+            name: '',
+            email: '',
+        },
         handleAuth: (authObj) => {
             switch (authObj.type) {
                 case 'signin':
                     // SIGN IN LOGIC HERE
+                    setState({
+                        ...state,
+                        authd: true,
+                        currentUser: {
+                            email: authObj.email
+                        }
+                    });
                     break;
                 case 'signup':
                     // SIGN IN LOGIC HERE
-                    console.log(authObj);
+                    setState({
+                        ...state,
+                        authd: true,
+                        currentUser: {
+                            name: authObj.name,
+                            email: authObj.email
+                        }
+                    });
+                    break;
+                case 'signout':
+                    setState({
+                        ...state,
+                        authd: false
+                    });
                     break;
             }
-            setState({
-                ...state,
-                authd: true
-            });
         }
     });
 
