@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext } from './node_modules/react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 import { StateContext } from '../../context/StateContext.js';

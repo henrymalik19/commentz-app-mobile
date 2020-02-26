@@ -1,4 +1,4 @@
-import React from 'react';
+import React from './node_modules/react';
 import { StyleSheet, Text, TextInput, Image, FlatList, View } from 'react-native';
 
 import { generateMessages } from '../../utils/fakeData.js';

@@ -3,13 +3,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome } from '@expo/vector-icons';
 
 // IMPORT COMPONENTS
-import Chats from '../Chats/Chats.jsx';
-import Rooms from '../Rooms/Rooms.jsx';
+import ChatStack from '../routes/ChatStack.jsx';
+import RoomStack from '../routes/RoomStack.jsx';
 
 // const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
-export default function Home() {
+export default function HomeTab() {
 
     return (
         <Tab.Navigator
@@ -34,11 +34,11 @@ export default function Home() {
         >
             <Tab.Screen
                 name='Chats'
-                component={Chats}
+                component={ChatStack}
             />
             <Tab.Screen
                 name='Rooms'
-                component={Rooms}
+                component={RoomStack}
             />
         </Tab.Navigator>
     )
