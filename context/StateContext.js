@@ -1,6 +1,8 @@
 import React, { createContext, useState } from 'react';
 import { Keyboard } from 'react-native';
 
+import { getAvatar, getName } from '../utils/fakeData.js';
+
 const StateContext = createContext();
 
 const StateContextProvider = (props) => {
@@ -11,6 +13,7 @@ const StateContextProvider = (props) => {
             id: 1,
             name: '',
             email: '',
+            avatar: ''
         },
         handleAuth: (authObj) => {
             switch (authObj.type) {
@@ -20,7 +23,9 @@ const StateContextProvider = (props) => {
                         ...state,
                         authd: true,
                         currentUser: {
-                            email: authObj.email
+                            name: authObj.name || getName(),
+                            email: authObj.email,
+                            avatar: getAvatar()
                         }
                     });
                     break;
@@ -31,7 +36,8 @@ const StateContextProvider = (props) => {
                         authd: true,
                         currentUser: {
                             name: authObj.name,
-                            email: authObj.email
+                            email: authObj.email,
+                            avatar: getAvatar()
                         }
                     });
                     break;
