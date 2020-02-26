@@ -1,9 +1,9 @@
-import React from 'react';
+import React from './node_modules/react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo } from './node_modules/@expo/vector-icons';
 
 
-export default function Header({keyboardOpen}) {
+export default function Header({ keyboardOpen }) {
 
     return (
         <View style={keyboardOpen ? stylesKBOpen.container : styles.container}>

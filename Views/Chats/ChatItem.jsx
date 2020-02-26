@@ -1,7 +1,7 @@
-import React from 'react';
+import React from './node_modules/react';
 import { StyleSheet, Text, Image, TouchableWithoutFeedback, View } from 'react-native';
 
-export default function Chat(props) {
+export default function ChatItem(props) {
     return (
         <TouchableWithoutFeedback onPress={props.onPress}>
             <View style={styles.container}>
