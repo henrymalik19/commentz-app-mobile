@@ -1,5 +1,5 @@
-import React, { useState } from './node_modules/react';
-import { Keyboard, KeyboardAvoidingView } from 'react-native';
+import React, { useState } from 'react';
+import { KeyboardAvoidingView } from 'react-native';
 
 import Header from './Header.jsx';
 import Signup from './Signup.jsx';
@@ -11,7 +11,7 @@ export default function Authenticate({ keyboardOpen }) {
 
     return (
         <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding' keyboardVerticalOffset='-200' >
-            <Header keyboardOpen={keyboardOpen} />
+            {/* <Header keyboardOpen={keyboardOpen} /> */}
             {view === 'signin' ? <Signin changeView={() => setView('signup')} /> : <Signup changeView={() => setView('signin')} />}
         </ KeyboardAvoidingView>
     )

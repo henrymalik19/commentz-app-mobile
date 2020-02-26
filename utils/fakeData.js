@@ -42,4 +42,16 @@ function generateMessages(num) {
     return data
 }
 
-export { generateUserData, generateMessages };
+function getAvatar() {
+
+    avatar = faker.image.avatar();
+    return avatar;
+}
+
+function getName() {
+
+    name = faker.name.findName();
+    return name;
+}
+
+export { generateUserData, generateMessages, getAvatar, getName };
