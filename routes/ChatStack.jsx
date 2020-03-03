@@ -26,7 +26,7 @@ export default function ChatStack(props) {
                     headerLeft: ({ canGoBack }) => {
                         if (canGoBack === true) {
                             return (
-                                <TouchableWithoutFeedback onPress={props.navigation.navigate('ChatList')}>
+                                <TouchableWithoutFeedback onPress={() => props.navigation.navigate('ChatList')}>
                                     <MaterialIcons name="arrow-back" style={styles.headerLeftBack} />
                                 </TouchableWithoutFeedback>
                             )
