@@ -86,7 +86,7 @@ export default function Signin(props) {
                         : email.valid === false ? styles.inputBoxInvalid
                             : styles.inputBox}
                 onFocus={() => setFocus('email')}
-                onChangeText={(val) => validateInput({ type: 'email', value: val })}
+                onChangeText={(val) => validateInput({ type: 'email', value: val.trim() })}
             />
             {errorMsg('pass')}
             <TextInput
@@ -96,7 +96,7 @@ export default function Signin(props) {
                         : pass.valid === false ? styles.inputBoxInvalid
                             : styles.inputBox}
                 onFocus={() => setFocus('pass')}
-                onChangeText={(val) => validateInput({ type: 'pass', value: val })}
+                onChangeText={(val) => validateInput({ type: 'pass', value: val.trim() })}
                 secureTextEntry
             />
             <Button

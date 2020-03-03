@@ -7,6 +7,7 @@ const StateContext = createContext();
 
 const StateContextProvider = (props) => {
     let [state, setState] = useState({
+        socket: '',
         keyboardOpen: false,
         authd: false,
         currentUser: {
@@ -21,6 +22,7 @@ const StateContextProvider = (props) => {
                     // SIGN IN LOGIC HERE
                     setState({
                         ...state,
+                        socket: new WebSocket('ws://10.0.10.58:6000'),
                         authd: true,
                         currentUser: {
                             name: authObj.name || getName(),

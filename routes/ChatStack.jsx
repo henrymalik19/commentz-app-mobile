@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TextInput, Text, TouchableWithoutFeedback, Button } from 'react-native';
+import { StyleSheet, TextInput, Text, TouchableWithoutFeedback, KeyboardAvoidingView, Button } from 'react-native';
 import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -10,46 +10,51 @@ const Stack = createStackNavigator();
 
 export default function ChatStack(props) {
     return (
-        <Stack.Navigator
-            screenOptions={{
-                headerTitleAlign: 'center',
-                headerTitleStyle: {
-                    color: 'lightslategrey',
-                    fontWeight: 'bold',
-                    textTransform: 'uppercase'
-                },
-                headerTintColor: 'lightgrey',
-                headerLeft: ({ canGoBack }) => {
-                    if (canGoBack === true) {
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior='padding'
+        >
+            <Stack.Navigator
+                screenOptions={{
+                    headerTitleAlign: 'center',
+                    headerTitleStyle: {
+                        color: 'lightslategrey',
+                        fontWeight: 'bold',
+                        textTransform: 'uppercase'
+                    },
+                    headerTintColor: 'lightgrey',
+                    headerLeft: ({ canGoBack }) => {
+                        if (canGoBack === true) {
+                            return (
+                                <TouchableWithoutFeedback onPress={props.navigation.goBack}>
+                                    <MaterialIcons name="arrow-back" style={styles.headerLeftBack} />
+                                </TouchableWithoutFeedback>
+                            )
+                        } else {
+                            return (
+                                <TouchableWithoutFeedback onPress={props.navigation.toggleDrawer}>
+                                    <MaterialIcons name="menu" style={styles.headerLeftMain} />
+                                </TouchableWithoutFeedback>
+                            )
+                        }
+                    },
+                    headerRight: () => {
                         return (
-                            <TouchableWithoutFeedback onPress={props.navigation.goBack}>
-                                <MaterialIcons name="arrow-back" style={styles.headerLeftBack} />
-                            </TouchableWithoutFeedback>
-                        )
-                    } else {
-                        return (
-                            <TouchableWithoutFeedback onPress={props.navigation.toggleDrawer}>
-                                <MaterialIcons name="menu" style={styles.headerLeftMain} />
+                            <TouchableWithoutFeedback >
+                                <MaterialIcons name="search" style={styles.headerRightSearch} />
                             </TouchableWithoutFeedback>
                         )
                     }
-                },
-                headerRight: () => {
-                    return (
-                        <TouchableWithoutFeedback >
-                            <MaterialIcons name="search" style={styles.headerRightSearch} />
-                        </TouchableWithoutFeedback>
-                    )
-                }
-            }}
-        >
-            <Stack.Screen name='ChatList' component={ChatList} options={{ title: 'Commentz' }} />
-            <Stack.Screen
-                name='ChatDetail'
-                component={ChatDetail}
-                options={({ route }) => ({ title: route.params.name })}
-            />
-        </Stack.Navigator>
+                }}
+            >
+                <Stack.Screen name='ChatList' component={ChatList} options={{ title: 'Commentz' }} />
+                <Stack.Screen
+                    name='ChatDetail'
+                    component={ChatDetail}
+                    options={({ route }) => ({ title: route.params.name })}
+                />
+            </Stack.Navigator>
+        </KeyboardAvoidingView>
     )
 }
 

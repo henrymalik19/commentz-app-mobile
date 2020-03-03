@@ -1,33 +1,66 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, Image, FlatList, View, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { StyleSheet, Text, TextInput, Image, FlatList, KeyboardAvoidingView, View, TouchableWithoutFeedback } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+
+import { StateContext } from '../../context/StateContext.js';
 
 import { generateMessages } from '../../utils/fakeData.js';
 
+// let ws = new WebSocket('ws://10.0.10.58:6000');
+
+// ws.onopen = () => {
+//     // connection opened
+//     ws.send('hello'); // send a message
+// };
+
+// ws.onmessage = (e) => {
+//     // a message was received
+//     console.log(e.data);
+// };
+
+
 export default function ChatDetail() {
 
-    let [msgs, setMsgs] = useState([]);
-    let [responseVal, setResponseVal] = useState();
+    let context = useContext(StateContext);
 
-    let handleSendResp = () => {
+    let [msgs, setMsgs] = useState(generateMessages(20));
+    let [resVal, setResVal] = useState('');
 
-        let msg = generateMessages(1)[0];
-        msg.message = responseVal;
-        msg.id = '50';
+    // useEffect(() => {
+    // ws.onmessage = (e) => {
+    //     // a message was received
+    //     console.log(e.data);
+    //     let newMsg = generateMessages(1)[0];
+    //     let newMsg2 = generateMessages(1)[1];
+    //     setMsgs([newMsg, newMsg2, ...msgs]);
+    //     // setMsgs([newMsg2, ...msgs]);
+    //     console.log(newMsg);
+    //     // data.push(newMsg);
+    // };
+    // }, []);
 
-        // msgs.push(msg);
-        setMsgs([...msgs, msg]);
-        console.log(msgs);
-        setResponseVal('');
+    let handleSubmit = () => {
+        // ws.send();
+        let newMsg = {
+            id: (Math.floor(Math.random() * 1000) + 50).toString(),
+            userId: context.currentUser.id,
+            avatar: context.currentUser.avatar,
+            message: resVal
+        }
+
+        setMsgs([newMsg, ...msgs]);
+
+        setResVal('');
     }
 
+
+
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container}>
             <FlatList
                 inverted
                 style={styles.msgList}
-                data={generateMessages(20)}
-                extraData={msgs}
+                data={msgs}
                 renderItem={
                     ({ item }) => {
 
@@ -50,7 +83,7 @@ export default function ChatDetail() {
                             return (
                                 <View style={styles.msgContainer}>
                                     <View style={styles.msgTextBoxMe}>
-                                        <Text style={styles.text}>{item.message}</Text>
+                                        <Text style={styles.textMe}>{item.message}</Text>
                                     </View>
                                     <View style={styles.AvatarMe}>
                                         <Image
@@ -66,32 +99,26 @@ export default function ChatDetail() {
                 }
                 keyExtractor={item => item.id}
             />
-            <View style={styles.ResponseBox}>
+            <View style={styles.respArea}>
                 <TextInput
                     placeholder='Enter Message...'
-                    style={styles.ResponseInput}
-                    value={responseVal}
-                    onChangeText={(val) => setResponseVal(val)}
+                    style={styles.respInput}
+                    value={resVal}
+                    onChangeText={(val) => setResVal(val)}
                 />
-                <TouchableWithoutFeedback onPress={handleSendResp}>
+                <TouchableWithoutFeedback onPress={handleSubmit}>
                     <FontAwesome
                         name="send"
                         style={{
-                            display: responseVal === '' ? 'none' : 'flex',
-                            width: 60,
-                            textAlign: 'center',
-                            textAlignVertical: 'center',
-                            fontSize: 24,
-                            color: 'lightgreen',
-                            borderRadius: 30
+                            ...styles.respSend,
+                            display: resVal === '' ? 'none' : 'flex'
                         }}
                     />
                 </TouchableWithoutFeedback>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -99,6 +126,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     msgList: {
+        flex: 1,
         marginLeft: 20,
         marginRight: 20,
     },
@@ -126,29 +154,43 @@ const styles = StyleSheet.create({
     },
     msgTextBox: {
         flex: 4,
-        padding: 15,
-        borderRadius: 15,
-        backgroundColor: 'lightgrey'
+        alignItems: 'flex-start'
     },
     msgTextBoxMe: {
         flex: 4,
-        padding: 15,
-        borderRadius: 15,
-        backgroundColor: 'lightgreen'
+        alignItems: 'flex-end'
     },
     text: {
         fontSize: 16,
         color: 'white',
+        padding: 15,
+        borderRadius: 15,
+        backgroundColor: 'lightgrey',
     },
-    ResponseBox: {
-        // flex: 1,
-        flexDirection: 'row',
-        height: 60
+    textMe: {
+        fontSize: 16,
+        color: 'white',
+        padding: 15,
+        borderRadius: 15,
+        backgroundColor: 'lightgreen'
     },
-    ResponseInput: {
-        flex: 1,
+    respArea: {
         height: 60,
+        paddingLeft: 30,
+        paddingRight: 30,
+        flexDirection: 'row'
+    },
+    respInput: {
+        flex: 1,
         padding: 15,
         backgroundColor: '#fff'
+    },
+    respSend: {
+        width: 60,
+        fontSize: 24,
+        marginLeft: 20,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        color: 'lightgreen'
     }
 });
