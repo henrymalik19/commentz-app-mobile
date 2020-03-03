@@ -1,17 +1,33 @@
-import React from 'react';
-import { StyleSheet, Text, TextInput, Image, FlatList, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TextInput, Image, FlatList, View, TouchableWithoutFeedback } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
 import { generateMessages } from '../../utils/fakeData.js';
 
 export default function ChatDetail() {
 
-    let data = generateMessages(20);
+    let [msgs, setMsgs] = useState([]);
+    let [responseVal, setResponseVal] = useState();
+
+    let handleSendResp = () => {
+
+        let msg = generateMessages(1)[0];
+        msg.message = responseVal;
+        msg.id = '50';
+
+        // msgs.push(msg);
+        setMsgs([...msgs, msg]);
+        console.log(msgs);
+        setResponseVal('');
+    }
 
     return (
         <View style={styles.container}>
             <FlatList
+                inverted
                 style={styles.msgList}
-                data={data}
+                data={generateMessages(20)}
+                extraData={msgs}
                 renderItem={
                     ({ item }) => {
 
@@ -50,8 +66,27 @@ export default function ChatDetail() {
                 }
                 keyExtractor={item => item.id}
             />
-            <View>
-                <TextInput placeholder='Enter Message...' style={styles.msgInput}></TextInput>
+            <View style={styles.ResponseBox}>
+                <TextInput
+                    placeholder='Enter Message...'
+                    style={styles.ResponseInput}
+                    value={responseVal}
+                    onChangeText={(val) => setResponseVal(val)}
+                />
+                <TouchableWithoutFeedback onPress={handleSendResp}>
+                    <FontAwesome
+                        name="send"
+                        style={{
+                            display: responseVal === '' ? 'none' : 'flex',
+                            width: 60,
+                            textAlign: 'center',
+                            textAlignVertical: 'center',
+                            fontSize: 24,
+                            color: 'lightgreen',
+                            borderRadius: 30
+                        }}
+                    />
+                </TouchableWithoutFeedback>
             </View>
         </View>
     )
@@ -105,7 +140,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'white',
     },
-    msgInput: {
+    ResponseBox: {
+        // flex: 1,
+        flexDirection: 'row',
+        height: 60
+    },
+    ResponseInput: {
+        flex: 1,
         height: 60,
         padding: 15,
         backgroundColor: '#fff'
