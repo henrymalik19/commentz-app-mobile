@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, View } from 'react-native';
 
 import ChatItem from './ChatItem.jsx';
@@ -7,11 +7,12 @@ import { generateUserData } from '../../utils/fakeData.js';
 
 export default function ChatList({ navigation }) {
 
+    let [chats, setChats] = useState(generateUserData(20))
     return (
         <View>
             <FlatList
                 style={{ backgroundColor: '#fff' }}
-                data={generateUserData(20)}
+                data={chats}
                 renderItem={
                     ({ item }) => (
                         <ChatItem
