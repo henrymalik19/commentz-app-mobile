@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Keyboard, StyleSheet, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 
 // COMPONENT IMPORTS
 // import Authenticate from './views/Authenticate/Authenticate.jsx';
