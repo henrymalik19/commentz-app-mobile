@@ -4,19 +4,9 @@ import { FontAwesome } from '@expo/vector-icons';
 
 import { StateContext } from '../../context/StateContext.js';
 
+// USED TO GENERATE FAKE DATA
 import { generateMessages } from '../../utils/fakeData.js';
-
-// let ws = new WebSocket('ws://10.0.10.58:6000');
-
-// ws.onopen = () => {
-//     // connection opened
-//     ws.send('hello'); // send a message
-// };
-
-// ws.onmessage = (e) => {
-//     // a message was received
-//     console.log(e.data);
-// };
+// USED TO GENERATE FAKE DATA
 
 
 export default function ChatDetail() {
@@ -24,33 +14,32 @@ export default function ChatDetail() {
     let context = useContext(StateContext);
 
     let [msgs, setMsgs] = useState(generateMessages(20));
-    let [resVal, setResVal] = useState('');
+    let [resTxt, setResTxt] = useState('');
 
-    // useEffect(() => {
-    // ws.onmessage = (e) => {
-    //     // a message was received
-    //     console.log(e.data);
-    //     let newMsg = generateMessages(1)[0];
-    //     let newMsg2 = generateMessages(1)[1];
-    //     setMsgs([newMsg, newMsg2, ...msgs]);
-    //     // setMsgs([newMsg2, ...msgs]);
-    //     console.log(newMsg);
-    //     // data.push(newMsg);
-    // };
-    // }, []);
+    context.socket.onmessage = (e) => {
+
+        let newMsg = {
+            id: (Math.floor(Math.random() * 10000) + 50).toString(),
+            userId: 1,
+            avatar: '',
+            message: e.data.trim()
+        }
+
+        setMsgs(prevMsgs => [newMsg, ...prevMsgs]);
+    }
 
     let handleSubmit = () => {
-        // ws.send();
+        context.socket.send(resTxt.trim());
         let newMsg = {
             id: (Math.floor(Math.random() * 1000) + 50).toString(),
             userId: context.currentUser.id,
             avatar: context.currentUser.avatar,
-            message: resVal
+            message: resTxt.trim()
         }
 
-        setMsgs([newMsg, ...msgs]);
+        setMsgs(prevMsgs => [newMsg, ...prevMsgs]);
 
-        setResVal('');
+        setResTxt('');
     }
 
 
@@ -63,8 +52,7 @@ export default function ChatDetail() {
                 data={msgs}
                 renderItem={
                     ({ item }) => {
-
-                        if (item.userId === '1') {
+                        if (item.userId === 1) {
                             return (
                                 <View style={styles.msgContainer}>
                                     <View style={styles.Avatar}>
@@ -88,7 +76,7 @@ export default function ChatDetail() {
                                     <View style={styles.AvatarMe}>
                                         <Image
                                             style={styles.AvatarImg}
-                                            source={{ uri: item.avatar }}
+                                            source={{ uri: context.currentUser.avatar }}
                                         />
                                     </View>
                                 </View>
@@ -103,15 +91,15 @@ export default function ChatDetail() {
                 <TextInput
                     placeholder='Enter Message...'
                     style={styles.respInput}
-                    value={resVal}
-                    onChangeText={(val) => setResVal(val)}
+                    value={resTxt}
+                    onChangeText={(val) => setResTxt(val)}
                 />
                 <TouchableWithoutFeedback onPress={handleSubmit}>
                     <FontAwesome
                         name="send"
                         style={{
                             ...styles.respSend,
-                            display: resVal === '' ? 'none' : 'flex'
+                            display: resTxt === '' ? 'none' : 'flex'
                         }}
                     />
                 </TouchableWithoutFeedback>
@@ -132,10 +120,10 @@ const styles = StyleSheet.create({
     },
     msgContainer: {
         flexDirection: 'row',
-        marginTop: 10,
-        marginBottom: 10,
-        paddingTop: 10,
-        paddingBottom: 10,
+        marginTop: 2.5,
+        marginBottom: 2.5,
+        paddingTop: 5,
+        paddingBottom: 5,
         // backgroundColor: 'orange'
     },
     Avatar: {

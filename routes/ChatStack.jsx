@@ -27,13 +27,13 @@ export default function ChatStack(props) {
                         if (canGoBack === true) {
                             return (
                                 <TouchableWithoutFeedback onPress={() => props.navigation.navigate('ChatList')}>
-                                    <MaterialIcons name="arrow-back" style={styles.headerLeftBack} />
+                                    <MaterialIcons name="arrow-back" style={styles.headerBtns} />
                                 </TouchableWithoutFeedback>
                             )
                         } else {
                             return (
                                 <TouchableWithoutFeedback onPress={props.navigation.toggleDrawer}>
-                                    <MaterialIcons name="menu" style={styles.headerLeftMain} />
+                                    <MaterialIcons name="menu" style={styles.headerBtns} />
                                 </TouchableWithoutFeedback>
                             )
                         }
@@ -41,7 +41,7 @@ export default function ChatStack(props) {
                     headerRight: () => {
                         return (
                             <TouchableWithoutFeedback >
-                                <MaterialIcons name="search" style={styles.headerRightSearch} />
+                                <MaterialIcons name="search" style={styles.headerBtns} />
                             </TouchableWithoutFeedback>
                         )
                     }
@@ -59,7 +59,7 @@ export default function ChatStack(props) {
 }
 
 const styles = StyleSheet.create({
-    headerLeftMain: {
+    headerBtns: {
         flex: 1,
         width: 50,
         marginLeft: 5,
@@ -67,24 +67,5 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
         color: 'lightgrey',
         fontSize: 32,
-    },
-    headerLeftBack: {
-        flex: 1,
-        width: 50,
-        marginLeft: 5,
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        color: 'lightgrey',
-        fontSize: 32
-    },
-    headerRightSearch: {
-        flex: 1,
-        width: 50,
-        marginRight: 5,
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        color: 'lightgrey',
-        fontSize: 32,
-        // backgroundColor: 'red'
     }
 });

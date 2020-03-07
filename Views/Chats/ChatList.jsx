@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FlatList, View } from 'react-native';
+import { StateContext } from '../../context/StateContext.js';
 
 import ChatItem from './ChatItem.jsx';
 
+// USED TO GENERATE FAKE DATA
 import { generateUserData } from '../../utils/fakeData.js';
+// USED TO GENERATE FAKE DATA
 
 export default function ChatList({ navigation }) {
 
-    let [chats, setChats] = useState(generateUserData(20))
+    const { chats } = useContext(StateContext);
+
     return (
         <View>
             <FlatList

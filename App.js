@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 // COMPONENT IMPORTS
-// import Authenticate from './views/Authenticate/Authenticate.jsx';
 import AuthStack from './routes/AuthStack.jsx';
 import MainDraw from './routes/MainDraw.jsx';
 

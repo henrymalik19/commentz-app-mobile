@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import { Keyboard } from 'react-native';
+import { generateUserData } from '../utils/fakeData.js';
 
 import { getAvatar, getName } from '../utils/fakeData.js';
 
@@ -8,17 +8,17 @@ const StateContext = createContext();
 const StateContextProvider = (props) => {
     let [state, setState] = useState({
         socket: '',
-        keyboardOpen: false,
         authd: false,
+        chats: generateUserData(20),
         currentUser: {
-            id: 1,
+            id: 0,
             name: '',
             email: '',
             avatar: ''
         },
         handleAuth: (authObj) => {
             switch (authObj.type) {
-                case 'signin':
+                case 'signin' || 'signup':
                     // SIGN IN LOGIC HERE
                     setState({
                         ...state,
@@ -31,22 +31,18 @@ const StateContextProvider = (props) => {
                         }
                     });
                     break;
-                case 'signup':
-                    // SIGN IN LOGIC HERE
-                    setState({
-                        ...state,
-                        authd: true,
-                        currentUser: {
-                            name: authObj.name,
-                            email: authObj.email,
-                            avatar: getAvatar()
-                        }
-                    });
-                    break;
                 case 'signout':
                     setState({
                         ...state,
-                        authd: false
+                        socket: '',
+                        authd: false,
+                        chats: '',
+                        currentUser: {
+                            id: '',
+                            name: '',
+                            email: '',
+                            avatar: ''
+                        }
                     });
                     break;
             }

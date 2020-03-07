@@ -21,20 +21,18 @@ function generateMessages(num) {
 
     let data = [];
 
-    let userOne = faker.image.avatar();
-    let userTwo = faker.image.avatar();
+    let guest = faker.image.avatar();
 
     for (let i = 0; i < num; i++) {
         data.push({
             id: i.toString(),
-            userId: '1',
-            avatar: userOne,
+            userId: 0,
             message: faker.lorem.paragraph()
         });
         data.push({
             id: (num + i).toString(),
-            userId: '2',
-            avatar: userTwo,
+            userId: 1,
+            avatar: guest,
             message: faker.lorem.paragraph()
         });
     }
