@@ -1,58 +1,79 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, handleMsg } from 'react';
 import { StyleSheet, Text, TextInput, Image, FlatList, KeyboardAvoidingView, View, TouchableWithoutFeedback } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { StateContext } from '../../context/StateContext.js';
 
-// USED TO GENERATE FAKE DATA
-import { generateMessages } from '../../utils/fakeData.js';
-// USED TO GENERATE FAKE DATA
 
+export default function ChatDetail({ route }) {
 
-export default function ChatDetail() {
-
-    let context = useContext(StateContext);
-
-    let [msgs, setMsgs] = useState(generateMessages(20));
+    let [{ socket, chats, currentUser }, setState] = useContext(StateContext);
     let [resTxt, setResTxt] = useState('');
 
-    context.socket.onmessage = (e) => {
+    let msgs = chats[route.params.chatId].messages;
 
-        let newMsg = {
-            id: (Math.floor(Math.random() * 10000) + 50).toString(),
-            userId: 1,
-            avatar: '',
-            message: e.data.trim()
-        }
-
-        setMsgs(prevMsgs => [newMsg, ...prevMsgs]);
+    socket.onmessage = (e) => {
+        let data = JSON.parse(e.data);
+        // CONFIRM THAT MESSAGE WAS SENT AND RECVD
+        console.log(data);
     }
 
-    let handleSubmit = () => {
-        context.socket.send(resTxt.trim());
+    const handleSubmit = () => {
+
         let newMsg = {
+            chatId: route.params.chatId,
             id: (Math.floor(Math.random() * 1000) + 50).toString(),
-            userId: context.currentUser.id,
-            avatar: context.currentUser.avatar,
+            userId: currentUser.id,
+            avatar: currentUser.avatar,
+            recvd: false,
             message: resTxt.trim()
         }
+        socket.send(JSON.stringify(newMsg));
 
-        setMsgs(prevMsgs => [newMsg, ...prevMsgs]);
+        setState(prevState => ({
+            ...prevState,
+            chats: [
+                ...prevState.chats,
+                prevState.chats[route.params.chatId].messages = [newMsg, ...prevState.chats[route.params.chatId].messages]
+            ],
+        }))
 
         setResTxt('');
     }
-
-
 
     return (
         <KeyboardAvoidingView style={styles.container}>
             <FlatList
                 inverted
+                keyExtractor={item => item.id}
                 style={styles.msgList}
                 data={msgs}
                 renderItem={
                     ({ item }) => {
-                        if (item.userId === 1) {
+                        if (item.userId === currentUser.id) {
+                            return (
+                                <View style={styles.msgContainer}>
+                                    <View style={styles.msgTextBoxMe}>
+                                        <Text
+                                            style={item.recvd ?
+                                                styles.textMe :
+                                                {
+                                                    ...styles.textMe,
+                                                    backgroundColor: 'red'
+                                                }
+                                            }
+                                        >{item.message}</Text>
+                                    </View>
+                                    <View style={styles.AvatarMe}>
+                                        <Image
+                                            style={styles.AvatarImg}
+                                            source={{ uri: currentUser.avatar }}
+                                        />
+                                    </View>
+                                </View>
+                            )
+                        }
+                        else {
                             return (
                                 <View style={styles.msgContainer}>
                                     <View style={styles.Avatar}>
@@ -67,25 +88,9 @@ export default function ChatDetail() {
                                 </View>
                             )
                         }
-                        else {
-                            return (
-                                <View style={styles.msgContainer}>
-                                    <View style={styles.msgTextBoxMe}>
-                                        <Text style={styles.textMe}>{item.message}</Text>
-                                    </View>
-                                    <View style={styles.AvatarMe}>
-                                        <Image
-                                            style={styles.AvatarImg}
-                                            source={{ uri: context.currentUser.avatar }}
-                                        />
-                                    </View>
-                                </View>
-                            )
-                        }
 
                     }
                 }
-                keyExtractor={item => item.id}
             />
             <View style={styles.respArea}>
                 <TextInput

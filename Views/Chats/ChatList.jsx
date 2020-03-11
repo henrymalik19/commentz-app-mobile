@@ -1,16 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { StateContext } from '../../context/StateContext.js';
 
 import ChatItem from './ChatItem.jsx';
 
-// USED TO GENERATE FAKE DATA
-import { generateUserData } from '../../utils/fakeData.js';
-// USED TO GENERATE FAKE DATA
-
 export default function ChatList({ navigation }) {
 
-    const { chats } = useContext(StateContext);
+    const [state, setState] = useContext(StateContext);
+    let [chats, setChats] = useState(state.chats);
 
     return (
         <View>
@@ -22,10 +19,11 @@ export default function ChatList({ navigation }) {
                         <ChatItem
                             name={item.name}
                             avatar={item.avatar}
-                            message={item.message}
+                            message={item.messages[0].message}
                             date={item.date}
                             onPress={() => navigation.navigate('ChatDetail', {
-                                name: item.name
+                                name: item.name,
+                                chatId: item.id
                             })}
                         />
                     )

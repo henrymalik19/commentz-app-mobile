@@ -14,7 +14,7 @@ export default function App() {
     <StateContextProvider>
       <View style={styles.container}>
         <StateContextConsumer>
-          {context => (context.authd === false ? <AuthStack /> : <MainDraw />)}
+          {([state, setState]) => (state.authd === false ? <AuthStack /> : <MainDraw />)}
         </StateContextConsumer>
       </View>
     </StateContextProvider>

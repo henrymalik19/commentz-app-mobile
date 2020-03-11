@@ -1,17 +1,19 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, TextInput, Text, Button, View } from 'react-native';
 import validator from 'validator';
-
 import Header from './Header.jsx';
-
 import { StateContext } from '../../context/StateContext.js';
+
+//USED TO GENERATE FAKE DATA
+import { generateChat, getAvatar, getName } from '../../utils/fakeData.js';
+//USED TO GENERATE FAKE DATA
 
 export default function Signup(props) {
 
-    const context = useContext(StateContext);
+    const [state, setState] = useContext(StateContext);
 
     let [focus, setFocus] = useState('');
-
+    let [servErr, setServErr] = useState('');
     let [name, setName] = useState({
         value: '',
         valid: '',
@@ -31,7 +33,42 @@ export default function Signup(props) {
 
     let submitBtnDisabled = (name.valid && email.valid && pass.valid && pass.confirmed) ? false : true;
 
-    let validateInput = ({ type, value }) => {
+    const handleAuth = async () => {
+
+        try {
+            let res = await fetch('http://10.0.10.58:4000/api/v1/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name.value.trim(),
+                    email: email.value.trim(),
+                    password: pass.value.trim(),
+                }),
+            });
+            res = await res.json();
+            console.log(res);
+            if (res.error) throw new Error(res.error);
+            setState({
+                ...state,
+                socket: new WebSocket('ws://10.0.10.58:6000'),
+                authd: true,
+                chats: generateChat(5, res.user._id),
+                currentUser: {
+                    id: res.user._id,
+                    name: res.user.name,
+                    email: res.user.email,
+                    avatar: res.user.avatar
+                }
+            });
+
+        } catch (err) {
+            setServErr(err.message)
+        }
+    }
+
+    const validateInput = ({ type, value }) => {
         switch (type) {
             case 'name':
                 if (validator.isLength(value, { min: 5, max: 50 }) === false && value !== '') setName({
@@ -106,6 +143,9 @@ export default function Signup(props) {
 
     let errorMsg = (type) => {
         switch (type) {
+            case 'server':
+                if (!validator.isEmpty(servErr)) return <Text style={styles.error}>{servErr}</Text>
+                break;
             case 'name':
                 if (!validator.isEmpty(name.error) && focus === 'name') return <Text style={styles.error}>{name.error}</Text>
                 break;
@@ -124,6 +164,7 @@ export default function Signup(props) {
     return (
         <View style={styles.container}>
             <Header />
+            {errorMsg('server')}
             {errorMsg('name')}
             <TextInput
                 placeholder="Name"
@@ -171,12 +212,7 @@ export default function Signup(props) {
                 color='#90EE90'
                 style={styles.button}
                 disabled={submitBtnDisabled}
-                onPress={() => context.handleAuth({
-                    type: 'signup',
-                    name: name.value,
-                    email: email.value,
-                    password: pass.value
-                })}
+                onPress={handleAuth}
             />
             <Text style={styles.text}>Have An Account?</Text>
             <Button

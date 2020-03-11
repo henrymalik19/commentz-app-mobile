@@ -1,15 +1,16 @@
 import faker from 'faker';
 
-function generateUserData(num) {
+function generateChat(num, userid) {
 
     let data = []
 
     for (let i = 0; i < num; i++) {
+        let avatar = faker.image.avatar();
         data.push({
             id: i.toString(),
             name: faker.name.findName(),
-            avatar: faker.image.avatar(),
-            message: faker.lorem.paragraph(),
+            avatar: avatar,
+            messages: generateMessages(10, userid, avatar),
             date: faker.date.weekday()
         });
     }
@@ -17,22 +18,24 @@ function generateUserData(num) {
 }
 
 
-function generateMessages(num) {
+function generateMessages(num, id, avatar) {
 
     let data = [];
 
-    let guest = faker.image.avatar();
+    let guest = avatar;
 
     for (let i = 0; i < num; i++) {
         data.push({
             id: i.toString(),
-            userId: 0,
-            message: faker.lorem.paragraph()
+            userId: id,
+            recvd: true,
+            message: faker.lorem.paragraph(),
         });
         data.push({
             id: (num + i).toString(),
             userId: 1,
             avatar: guest,
+            recvd: true,
             message: faker.lorem.paragraph()
         });
     }
@@ -52,4 +55,4 @@ function getName() {
     return name;
 }
 
-export { generateUserData, generateMessages, getAvatar, getName };
+export { generateChat, generateMessages, getAvatar, getName };

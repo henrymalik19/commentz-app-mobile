@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, TextInput, Text, TouchableWithoutFeedback, KeyboardAvoidingView, Button } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
 import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, Entypo } from '@expo/vector-icons';
 
 import ChatList from '../views/Chats/ChatList.jsx';
 import ChatDetail from '../views/Chats/ChatDetail.jsx';
@@ -27,13 +27,13 @@ export default function ChatStack(props) {
                         if (canGoBack === true) {
                             return (
                                 <TouchableWithoutFeedback onPress={() => props.navigation.navigate('ChatList')}>
-                                    <MaterialIcons name="arrow-back" style={styles.headerBtns} />
+                                    <MaterialIcons name="arrow-back" style={styles.headerLeftBtns} />
                                 </TouchableWithoutFeedback>
                             )
                         } else {
                             return (
                                 <TouchableWithoutFeedback onPress={props.navigation.toggleDrawer}>
-                                    <MaterialIcons name="menu" style={styles.headerBtns} />
+                                    <MaterialIcons name="menu" style={styles.headerLeftBtns} />
                                 </TouchableWithoutFeedback>
                             )
                         }
@@ -41,7 +41,7 @@ export default function ChatStack(props) {
                     headerRight: () => {
                         return (
                             <TouchableWithoutFeedback >
-                                <MaterialIcons name="search" style={styles.headerBtns} />
+                                <Entypo name="new-message" style={styles.headerRightBtns} />
                             </TouchableWithoutFeedback>
                         )
                     }
@@ -59,13 +59,22 @@ export default function ChatStack(props) {
 }
 
 const styles = StyleSheet.create({
-    headerBtns: {
+    headerLeftBtns: {
         flex: 1,
         width: 50,
-        marginLeft: 5,
+        marginLeft: 20,
         textAlign: 'center',
         textAlignVertical: 'center',
         color: 'lightgrey',
         fontSize: 32,
+    },
+    headerRightBtns: {
+        flex: 1,
+        width: 50,
+        marginRight: 20,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        color: 'lightgrey',
+        fontSize: 24,
     }
 });

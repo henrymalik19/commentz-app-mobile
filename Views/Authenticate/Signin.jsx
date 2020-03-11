@@ -1,17 +1,18 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet, TextInput, Text, Button, View } from 'react-native';
 import validator from 'validator';
-
 import Header from './Header.jsx';
-
 import { StateContext } from '../../context/StateContext.js';
+
+//USED TO GENERATE FAKE DATA
+import { generateChat, getAvatar, getName } from '../../utils/fakeData.js';
+//USED TO GENERATE FAKE DATA
 
 export default function Signin(props) {
 
-    const context = useContext(StateContext);
-
+    const [state, setState] = useContext(StateContext);
     let [focus, setFocus] = useState('');
-
+    let [servErr, setServErr] = useState('');
     let [email, setEmail] = useState({
         value: '',
         valid: '',
@@ -25,7 +26,39 @@ export default function Signin(props) {
 
     let submitBtnDisabled = (email.valid && pass.valid) ? false : true;
 
-    let validateInput = ({ type, value }) => {
+    const handleAuth = async () => {
+
+        try {
+            let res = await fetch('http://10.0.10.58:4000/api/v1/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email.value,
+                    password: pass.value,
+                }),
+            });
+            res = await res.json();
+            if (res.error) throw new Error(res.error);
+            setState({
+                ...state,
+                socket: new WebSocket('ws://10.0.10.58:6000'),
+                authd: true,
+                chats: generateChat(5, res.user._id),
+                currentUser: {
+                    id: res.user._id,
+                    name: res.user.name,
+                    email: res.user.email,
+                    avatar: res.user.avatar
+                }
+            });
+        } catch (err) {
+            setServErr(err.message);
+        }
+    }
+
+    const validateInput = ({ type, value }) => {
         switch (type) {
             case 'email':
                 if (validator.isEmail(value) === false && value !== '') setEmail({
@@ -66,6 +99,9 @@ export default function Signin(props) {
 
     let errorMsg = (type) => {
         switch (type) {
+            case 'server':
+                if (!validator.isEmpty(servErr)) return <Text style={styles.error}>{servErr}</Text>
+                break;
             case 'email':
                 if (!validator.isEmpty(email.error) && focus === 'email') return <Text style={styles.error}>{email.error}</Text>
                 break;
@@ -78,6 +114,7 @@ export default function Signin(props) {
     return (
         <View style={styles.container}>
             <Header />
+            {errorMsg('server')}
             {errorMsg('email')}
             <TextInput
                 placeholder="Email"
@@ -103,11 +140,7 @@ export default function Signin(props) {
                 title={'Sign In'}
                 color='#90EE90'
                 disabled={submitBtnDisabled}
-                onPress={() => context.handleAuth({
-                    type: 'signin',
-                    email: email.value,
-                    password: pass.value
-                })}
+                onPress={handleAuth}
             />
             <Text style={styles.text}>Don't Have An Account?</Text>
             <Button
