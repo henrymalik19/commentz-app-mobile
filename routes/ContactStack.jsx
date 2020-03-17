@@ -3,13 +3,13 @@ import { StyleSheet, TouchableWithoutFeedback, KeyboardAvoidingView } from 'reac
 import { createStackNavigator } from '@react-navigation/stack';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 
-import ChatList from '../views/Chats/ChatList.jsx';
-import NewChat from '../views/Chats/NewChat.jsx';
-import ChatDetail from '../views/Chats/ChatDetail.jsx';
+
+import ContactList from '../views/Contacts/ContactList.jsx';
+import NewContact from '../views/Contacts/NewContact.jsx';
 
 const Stack = createStackNavigator();
 
-export default function ChatStack(props) {
+export default function ContactStack(props) {
 
     return (
         <KeyboardAvoidingView
@@ -28,7 +28,7 @@ export default function ChatStack(props) {
                     headerLeft: ({ canGoBack }) => {
                         if (canGoBack === true) {
                             return (
-                                <TouchableWithoutFeedback onPress={() => props.navigation.navigate('ChatList')}>
+                                <TouchableWithoutFeedback onPress={() => props.navigation.navigate('ContactList')}>
                                     <MaterialIcons name="arrow-back" style={styles.headerLeftBtns} />
                                 </TouchableWithoutFeedback>
                             )
@@ -42,20 +42,16 @@ export default function ChatStack(props) {
                     },
                     headerRight: () => {
                         return (
-                            <TouchableWithoutFeedback onPress={() => props.navigation.navigate('NewChat')}>
-                                <Entypo name="new-message" style={styles.headerRightBtns} />
+                            <TouchableWithoutFeedback onPress={() => props.navigation.navigate('NewContact')}>
+                                <Entypo name="plus" style={styles.headerRightBtns} />
                             </TouchableWithoutFeedback>
                         )
                     }
                 }}
             >
-                <Stack.Screen name='ChatList' component={ChatList} options={{ title: 'Commentz' }} />
-                <Stack.Screen name='NewChat' component={NewChat} />
-                <Stack.Screen
-                    name='ChatDetail'
-                    component={ChatDetail}
-                    options={({ route }) => ({ title: route.params.name })}
-                />
+                <Stack.Screen name='ContactList' component={ContactList} options={{ title: 'Contacts' }} />
+                <Stack.Screen name='NewContact' component={NewContact} options={{ title: 'Add A New Contact' }} />
+
             </Stack.Navigator>
         </KeyboardAvoidingView>
     )

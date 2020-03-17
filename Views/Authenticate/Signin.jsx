@@ -1,16 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TextInput, Text, Button, View } from 'react-native';
 import validator from 'validator';
 import Header from './Header.jsx';
-import { StateContext } from '../../context/StateContext.js';
-
-//USED TO GENERATE FAKE DATA
-import { generateChat, getAvatar, getName } from '../../utils/fakeData.js';
-//USED TO GENERATE FAKE DATA
+import { getState } from '../../context/StateContext.js';
 
 export default function Signin(props) {
 
-    const [state, setState] = useContext(StateContext);
+    const [state, dispatch] = getState();
+
     let [focus, setFocus] = useState('');
     let [servErr, setServErr] = useState('');
     let [email, setEmail] = useState({
@@ -26,7 +23,9 @@ export default function Signin(props) {
 
     let submitBtnDisabled = (email.valid && pass.valid) ? false : true;
 
-    const handleAuth = async () => {
+    const handleClick = async () => {
+
+        dispatch({ type: 'AUTH_SIGNIN_ATTEMPT' });
 
         try {
             let res = await fetch('http://10.0.10.58:4000/api/v1/signin', {
@@ -39,22 +38,13 @@ export default function Signin(props) {
                     password: pass.value,
                 }),
             });
+
             res = await res.json();
             if (res.error) throw new Error(res.error);
-            setState({
-                ...state,
-                socket: new WebSocket('ws://10.0.10.58:6000'),
-                authd: true,
-                chats: generateChat(5, res.user._id),
-                currentUser: {
-                    id: res.user._id,
-                    name: res.user.name,
-                    email: res.user.email,
-                    avatar: res.user.avatar
-                }
-            });
+            dispatch({ type: 'AUTH_SIGNIN_SUCCESS', payload: res });
         } catch (err) {
             setServErr(err.message);
+            dispatch({ type: 'AUTH_SIGNIN_ERROR', payload: err });
         }
     }
 
@@ -140,7 +130,7 @@ export default function Signin(props) {
                 title={'Sign In'}
                 color='#90EE90'
                 disabled={submitBtnDisabled}
-                onPress={handleAuth}
+                onPress={handleClick}
             />
             <Text style={styles.text}>Don't Have An Account?</Text>
             <Button

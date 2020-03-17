@@ -1,16 +1,17 @@
 import faker from 'faker';
+import { v4 as uuidv4 } from 'uuid';
 
-function generateChat(num, userid) {
+function generateChat(num, numMsgs, userid) {
 
     let data = []
 
     for (let i = 0; i < num; i++) {
         let avatar = faker.image.avatar();
         data.push({
-            id: i.toString(),
+            id: Math.floor((Math.random() * 10000) + 1).toString(),
             name: faker.name.findName(),
             avatar: avatar,
-            messages: generateMessages(10, userid, avatar),
+            messages: generateMessages(numMsgs, userid, avatar),
             date: faker.date.weekday()
         });
     }

@@ -1,19 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, View } from 'react-native';
-import { StateContext } from '../../context/StateContext.js';
+import { getState } from '../../context/StateContext.js';
 
 import ChatItem from './ChatItem.jsx';
 
 export default function ChatList({ navigation }) {
 
-    const [state, setState] = useContext(StateContext);
-    let [chats, setChats] = useState(state.chats);
+    const [{ chats, refresh }, dispatch] = getState();
 
     return (
         <View>
             <FlatList
                 style={{ backgroundColor: '#fff' }}
                 data={chats}
+                extraData={refresh}
                 renderItem={
                     ({ item }) => (
                         <ChatItem

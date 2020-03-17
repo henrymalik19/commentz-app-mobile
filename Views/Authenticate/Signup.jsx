@@ -1,20 +1,31 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TextInput, Text, Button, View } from 'react-native';
 import validator from 'validator';
 import Header from './Header.jsx';
-import { StateContext } from '../../context/StateContext.js';
+import { getState } from '../../context/StateContext.js';
 
-//USED TO GENERATE FAKE DATA
-import { generateChat, getAvatar, getName } from '../../utils/fakeData.js';
-//USED TO GENERATE FAKE DATA
+
 
 export default function Signup(props) {
 
-    const [state, setState] = useContext(StateContext);
+    // GET GLOBAL STATE
+    const [state, dispatch] = getState();
 
+    // SET LOCAL STATE
     let [focus, setFocus] = useState('');
     let [servErr, setServErr] = useState('');
-    let [name, setName] = useState({
+
+    let [fname, setFName] = useState({
+        value: '',
+        valid: '',
+        error: ''
+    });
+    let [lname, setLName] = useState({
+        value: '',
+        valid: '',
+        error: ''
+    });
+    let [handle, setHandle] = useState({
         value: '',
         valid: '',
         error: ''
@@ -31,9 +42,12 @@ export default function Signup(props) {
         confirmed: ''
     });
 
-    let submitBtnDisabled = (name.valid && email.valid && pass.valid && pass.confirmed) ? false : true;
+    // ENABLE AND DISABLE SUBMIT BUTTON
+    let submitBtnDisabled = (fname.valid && lname.valid && handle.valid && email.valid && pass.valid && pass.confirmed) ? false : true;
 
-    const handleAuth = async () => {
+    const handleSubmit = async () => {
+
+        dispatch({ type: 'AUTH_SIGNUP_ATTEMPT' });
 
         try {
             let res = await fetch('http://10.0.10.58:4000/api/v1/signup', {
@@ -42,46 +56,71 @@ export default function Signup(props) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    name: name.value.trim(),
+                    fname: fname.value.trim(),
+                    lname: lname.value.trim(),
+                    handle: handle.value.trim(),
                     email: email.value.trim(),
                     password: pass.value.trim(),
                 }),
             });
-            res = await res.json();
-            console.log(res);
-            if (res.error) throw new Error(res.error);
-            setState({
-                ...state,
-                socket: new WebSocket('ws://10.0.10.58:6000'),
-                authd: true,
-                chats: generateChat(5, res.user._id),
-                currentUser: {
-                    id: res.user._id,
-                    name: res.user.name,
-                    email: res.user.email,
-                    avatar: res.user.avatar
-                }
-            });
 
+            res = await res.json();
+            if (res.error) throw new Error(res.error);
+            dispatch({ type: 'AUTH_SIGNUP_SUCCESS', payload: res });
         } catch (err) {
             setServErr(err.message)
+            dispatch({ type: 'AUTH_SIGNUP_ERROR', payload: err });
         }
     }
 
     const validateInput = ({ type, value }) => {
         switch (type) {
-            case 'name':
-                if (validator.isLength(value, { min: 5, max: 50 }) === false && value !== '') setName({
+            case 'fname':
+                if (validator.isLength(value, { min: 3, max: 50 }) === false && value !== '') setFName({
                     value: value,
                     valid: false,
-                    error: 'invalid Name value'
+                    error: 'invalid First Name value'
                 })
-                else if (value === '') setName({
+                else if (value === '') setFName({
                     value: value,
                     valid: false,
                     error: ''
                 })
-                else setName({
+                else setFName({
+                    value: value,
+                    valid: true,
+                    error: ''
+                })
+                break;
+            case 'lname':
+                if (validator.isLength(value, { min: 3, max: 50 }) === false && value !== '') setLName({
+                    value: value,
+                    valid: false,
+                    error: 'invalid Last Name value'
+                })
+                else if (value === '') setLName({
+                    value: value,
+                    valid: false,
+                    error: ''
+                })
+                else setLName({
+                    value: value,
+                    valid: true,
+                    error: ''
+                })
+                break;
+            case 'handle':
+                if (validator.isLength(value, { min: 3, max: 50 }) === false && value !== '') setHandle({
+                    value: value,
+                    valid: false,
+                    error: 'invalid Handle'
+                })
+                else if (value === '') setHandle({
+                    value: value,
+                    valid: false,
+                    error: ''
+                })
+                else setHandle({
                     value: value,
                     valid: true,
                     error: ''
@@ -146,8 +185,14 @@ export default function Signup(props) {
             case 'server':
                 if (!validator.isEmpty(servErr)) return <Text style={styles.error}>{servErr}</Text>
                 break;
-            case 'name':
-                if (!validator.isEmpty(name.error) && focus === 'name') return <Text style={styles.error}>{name.error}</Text>
+            case 'fname':
+                if (!validator.isEmpty(fname.error) && focus === 'fname') return <Text style={styles.error}>{fname.error}</Text>
+                break;
+            case 'lname':
+                if (!validator.isEmpty(lname.error) && focus === 'lname') return <Text style={styles.error}>{lname.error}</Text>
+                break;
+            case 'handle':
+                if (!validator.isEmpty(handle.error) && focus === 'handle') return <Text style={styles.error}>{handle.error}</Text>
                 break;
             case 'email':
                 if (!validator.isEmpty(email.error) && focus === 'email') return <Text style={styles.error}>{email.error}</Text>
@@ -165,16 +210,32 @@ export default function Signup(props) {
         <View style={styles.container}>
             <Header />
             {errorMsg('server')}
-            {errorMsg('name')}
-            <TextInput
-                placeholder="Name"
-                style={
-                    name.valid === true ? styles.inputBoxValid
-                        : name.valid === false ? styles.inputBoxInvalid
-                            : styles.inputBox}
-                onFocus={() => setFocus('name')}
-                onChangeText={(val) => validateInput({ type: 'name', value: val })}
-            />
+            <View style={{ flexDirection: 'row' }}>
+                <View style={{ flex: 1, marginRight: 2.5 }}>
+                    {errorMsg('fname')}
+                    <TextInput
+                        placeholder="First Name"
+                        style={
+                            fname.valid === true ? styles.inputBoxValid
+                                : fname.valid === false ? styles.inputBoxInvalid
+                                    : styles.inputBox}
+                        onFocus={() => setFocus('fname')}
+                        onChangeText={(val) => validateInput({ type: 'fname', value: val })}
+                    />
+                </View>
+                <View style={{ flex: 1, marginLeft: 2.5 }}>
+                    {errorMsg('lname')}
+                    <TextInput
+                        placeholder="Last Name"
+                        style={
+                            lname.valid === true ? styles.inputBoxValid
+                                : lname.valid === false ? styles.inputBoxInvalid
+                                    : styles.inputBox}
+                        onFocus={() => setFocus('lname')}
+                        onChangeText={(val) => validateInput({ type: 'lname', value: val })}
+                    />
+                </View>
+            </View>
             {errorMsg('email')}
             <TextInput
                 placeholder="Email"
@@ -184,6 +245,16 @@ export default function Signup(props) {
                             : styles.inputBox}
                 onFocus={() => setFocus('email')}
                 onChangeText={(val) => validateInput({ type: 'email', value: val })}
+            />
+            {errorMsg('handle')}
+            <TextInput
+                placeholder="Handle"
+                style={
+                    handle.valid === true ? styles.inputBoxValid
+                        : handle.valid === false ? styles.inputBoxInvalid
+                            : styles.inputBox}
+                onFocus={() => setFocus('handle')}
+                onChangeText={(val) => validateInput({ type: 'handle', value: val })}
             />
             {errorMsg('pass')}
             <TextInput
@@ -212,7 +283,7 @@ export default function Signup(props) {
                 color='#90EE90'
                 style={styles.button}
                 disabled={submitBtnDisabled}
-                onPress={handleAuth}
+                onPress={handleSubmit}
             />
             <Text style={styles.text}>Have An Account?</Text>
             <Button

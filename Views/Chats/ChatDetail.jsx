@@ -1,43 +1,31 @@
-import React, { useState, useContext, handleMsg } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, Image, FlatList, KeyboardAvoidingView, View, TouchableWithoutFeedback } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
-import { StateContext } from '../../context/StateContext.js';
+import { getState } from '../../context/StateContext.js';
 
 
 export default function ChatDetail({ route }) {
 
-    let [{ socket, chats, currentUser }, setState] = useContext(StateContext);
+    let [{ socket, chats, currentUser, refresh }, dispatch] = getState();
     let [resTxt, setResTxt] = useState('');
 
-    let msgs = chats[route.params.chatId].messages;
-
-    socket.onmessage = (e) => {
-        let data = JSON.parse(e.data);
-        // CONFIRM THAT MESSAGE WAS SENT AND RECVD
-        console.log(data);
-    }
+    let chat = chats.find(chat => chat.id === route.params.chatId);
 
     const handleSubmit = () => {
-
         let newMsg = {
             chatId: route.params.chatId,
             id: (Math.floor(Math.random() * 1000) + 50).toString(),
             userId: currentUser.id,
-            avatar: currentUser.avatar,
             recvd: false,
+            recipientId: '123345',
+            avatar: currentUser.avatar,
             message: resTxt.trim()
         }
-        socket.send(JSON.stringify(newMsg));
 
-        setState(prevState => ({
-            ...prevState,
-            chats: [
-                ...prevState.chats,
-                prevState.chats[route.params.chatId].messages = [newMsg, ...prevState.chats[route.params.chatId].messages]
-            ],
-        }))
-
+        dispatch({ type: 'CHAT_SEND_MSG_ATTEMPT', payload: newMsg });
+        console.log(JSON.stringify({ type: 'SEND_MESSAGE_REQ', message: newMsg }));
+        socket.send(JSON.stringify({ type: 'SEND_MESSAGE_REQ', message: newMsg }));
         setResTxt('');
     }
 
@@ -47,7 +35,8 @@ export default function ChatDetail({ route }) {
                 inverted
                 keyExtractor={item => item.id}
                 style={styles.msgList}
-                data={msgs}
+                data={chat.messages}
+                extraData={refresh}
                 renderItem={
                     ({ item }) => {
                         if (item.userId === currentUser.id) {
