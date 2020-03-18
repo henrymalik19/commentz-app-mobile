@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, TextInput, Text, Button, View } from 'react-native';
 import validator from 'validator';
 import Header from './Header.jsx';
-import { getState } from '../../context/StateContext.js';
+import { getState } from '../../../context/StateContext.js';
 
 export default function Signin(props) {
 
@@ -26,9 +26,8 @@ export default function Signin(props) {
     const handleClick = async () => {
 
         dispatch({ type: 'AUTH_SIGNIN_ATTEMPT' });
-
         try {
-            let res = await fetch('http://10.0.10.58:4000/api/v1/signin', {
+            let res = await fetch('http://192.168.0.57:4000/api/v1/signin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

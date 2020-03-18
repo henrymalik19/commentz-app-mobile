@@ -3,8 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome } from '@expo/vector-icons';
 
 // IMPORT COMPONENTS
-import ChatStack from '../routes/ChatStack.jsx';
-import RoomStack from '../routes/RoomStack.jsx';
+import ChatStack from './ChatStack.jsx';
+import RoomStack from './RoomStack.jsx';
 
 // const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();

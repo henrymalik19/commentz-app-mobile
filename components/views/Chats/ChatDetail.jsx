@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { StyleSheet, Text, TextInput, Image, FlatList, KeyboardAvoidingView, View, TouchableWithoutFeedback } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
+import { Message } from './models/Message.js';
 
-import { getState } from '../../context/StateContext.js';
+import { getState } from '../../../context/StateContext.js';
 
 
 export default function ChatDetail({ route }) {
@@ -12,20 +14,31 @@ export default function ChatDetail({ route }) {
 
     let chat = chats.find(chat => chat.id === route.params.chatId);
 
-    const handleSubmit = () => {
-        let newMsg = {
-            chatId: route.params.chatId,
-            id: (Math.floor(Math.random() * 1000) + 50).toString(),
-            userId: currentUser.id,
-            recvd: false,
-            recipientId: '123345',
-            avatar: currentUser.avatar,
-            message: resTxt.trim()
-        }
+    useFocusEffect(
+        useCallback(() => {
+            console.log('works');
+            chat.messages = chat.messages.map(message => {
+                message.read = true;
+                return message;
+            });
+            dispatch({ type: 'CHAT_UPDATE_CHAT', payload: chat })
+        }, [chat])
+    );
 
-        dispatch({ type: 'CHAT_SEND_MSG_ATTEMPT', payload: newMsg });
-        console.log(JSON.stringify({ type: 'SEND_MESSAGE_REQ', message: newMsg }));
-        socket.send(JSON.stringify({ type: 'SEND_MESSAGE_REQ', message: newMsg }));
+    const handleSubmit = () => {
+
+        let msg = new Message({
+            chatId: route.params.chatId,
+            sender: {
+                id: currentUser.id,
+                avatar: currentUser.avatar
+            },
+            recipientId: chat.recipient.id,
+            text: resTxt.trim()
+        });
+        console.log(msg);
+        dispatch({ type: 'CHAT_SEND_MSG_ATTEMPT', payload: { ...msg, read: true } });
+        socket.send(JSON.stringify({ type: 'SEND_MESSAGE_REQ', message: msg }));
         setResTxt('');
     }
 
@@ -39,19 +52,18 @@ export default function ChatDetail({ route }) {
                 extraData={refresh}
                 renderItem={
                     ({ item }) => {
-                        if (item.userId === currentUser.id) {
+                        if (item.sender.id === currentUser.id) {
                             return (
                                 <View style={styles.msgContainer}>
                                     <View style={styles.msgTextBoxMe}>
                                         <Text
-                                            style={item.recvd ?
-                                                styles.textMe :
-                                                {
+                                            style={item.recvd ? styles.textMe
+                                                : {
                                                     ...styles.textMe,
                                                     backgroundColor: 'red'
                                                 }
                                             }
-                                        >{item.message}</Text>
+                                        >{item.text}</Text>
                                     </View>
                                     <View style={styles.AvatarMe}>
                                         <Image
@@ -68,11 +80,11 @@ export default function ChatDetail({ route }) {
                                     <View style={styles.Avatar}>
                                         <Image
                                             style={styles.AvatarImg}
-                                            source={{ uri: item.avatar }}
+                                            source={{ uri: chat.recipient.avatar }}
                                         />
                                     </View>
                                     <View style={styles.msgTextBox}>
-                                        <Text style={styles.text}>{item.message}</Text>
+                                        <Text style={styles.text}>{item.text}</Text>
                                     </View>
                                 </View>
                             )

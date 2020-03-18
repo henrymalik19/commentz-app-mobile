@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { getState } from '../context/StateContext.js';
+import { getState } from '../../context/StateContext.js';
 
 
 import HomeTab from './HomeTab';

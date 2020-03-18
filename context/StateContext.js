@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useContext, useEffect } from 'react';
 import reducer from './reducer.js';
-
+import { Chat } from '../components/views/Chats/models/Chat.js';
 // CREATE STATE CONTEXT
 const StateContext = createContext();
 
@@ -45,14 +45,34 @@ const StateProvider = (props) => {
                         break;
                     case 'RECV_MESSAGE_REQ':
                         // HANDLE NEW INCOMING MESSAGES
-                        dispatch({ type: 'CHAT_RECV_MSG', payload: data.message });
+                        data.message.recvDate = new Date();
+                        let chatIdx = state.chats.findIndex(chat => chat.id === data.message.chatId);
+                        console.log(`Existing Chat Index: ${chatIdx}`);
+                        console.log('##################vvvv STATE CHAT vvvv##################');
+                        console.log(state.chats);
+                        console.log('##################^^^^ STATE CHAT ^^^^##################');
+                        if (chatIdx === -1) {
+                            let chat = new Chat({
+                                chatId: data.message.chatId,
+                                recipient: {
+                                    id: data.message.sender.id,
+                                    name: 'Matt Jacobson', // GET FROM CONTACTS
+                                    handle: 'Malik19', // GET FROM CONTACTS
+                                    avatar: data.message.sender.avatar
+                                }
+                            });
+                            chat.messages.push(data.message);
+                            dispatch({ type: 'CHAT_NEW_CHAT', payload: chat });
+                        } else {
+                            dispatch({ type: 'CHAT_RECV_MSG', payload: data.message });
+                        }
                         break;
                     default:
                         break;
                 }
             }
         }
-    }, [state.socket])
+    }, [state])
 
     return (
         <StateContext.Provider value={[state, dispatch]}>

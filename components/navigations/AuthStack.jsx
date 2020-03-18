@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { getState } from '../context/StateContext.js';
+import { getState } from '../../context/StateContext.js';
 
 import Signin from '../views/Authenticate/Signin.jsx';
 import Signup from '../views/Authenticate/Signup.jsx';

@@ -19,7 +19,7 @@ export default function ChatItem(props) {
 
                 <View style={styles.right}>
                     <Text style={styles.rightDate}>{props.date}</Text>
-                    <Text style={styles.rightUnread}>2</Text>
+                    <Text style={props.unread === 0 ? styles.rightRead : styles.rightUnread}>{props.unread === 0 ? '' : props.unread}</Text>
                 </View>
             </View>
         </TouchableWithoutFeedback>
@@ -69,6 +69,16 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         textAlign: 'center',
         color: 'lightgrey'
+    },
+    rightRead: {
+        width: 18,
+        height: 18,
+        alignSelf: 'center',
+        textAlign: 'center',
+        fontSize: 12,
+        backgroundColor: '#fff',
+        color: '#fff',
+        borderRadius: 9
     },
     rightUnread: {
         width: 18,

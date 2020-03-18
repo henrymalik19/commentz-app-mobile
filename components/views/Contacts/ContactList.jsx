@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, FlatList, Text, Image, StyleSheet } from 'react-native';
-import { getState } from '../../context/StateContext.js';
+import { getState } from '../../../context/StateContext.js';
 
 export default function ContactList() {
 

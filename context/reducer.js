@@ -15,9 +15,9 @@ export default function reducer(state, action) {
                 ...state,
                 loading: false,
                 error: '',
-                socket: new WebSocket('ws://10.0.10.58:6000'),
+                socket: new WebSocket('ws://192.168.0.57:6000'),
                 authed: action.payload.authenticated,
-                chats: generateChat(5, 10, action.payload.user._id),
+                chats: [],
                 currentUser: {
                     id: action.payload.user._id,
                     fname: action.payload.user.fname,
@@ -45,9 +45,9 @@ export default function reducer(state, action) {
                 ...state,
                 loading: false,
                 error: '',
-                socket: new WebSocket('ws://10.0.10.58:6000'),
+                socket: new WebSocket('ws://192.168.0.57:6000'),
                 authed: action.payload.authenticated,
-                chats: generateChat(5, 10, action.payload.user._id),
+                chats: [],
                 currentUser: {
                     id: action.payload.user._id,
                     fname: action.payload.user.fname,
@@ -86,7 +86,6 @@ export default function reducer(state, action) {
                 error: action.payload
             }
         case 'USER_UPDATE':
-            console.log(action.payload);
             return {
                 ...state,
                 refresh: !state.refresh,
@@ -107,6 +106,12 @@ export default function reducer(state, action) {
                     action.payload,
                     ...state.chats
                 ]
+            }
+        case 'CHAT_UPDATE_CHAT':
+            state.chats.find(chat => chat.id === action.payload.id).messages = action.payload.messages;
+            return {
+                ...state,
+                refresh: !state.refresh
             }
         case 'CHAT_SEND_MSG_ATTEMPT':
             state.chats.find(chat => chat.id === action.payload.chatId).messages.unshift(action.payload)

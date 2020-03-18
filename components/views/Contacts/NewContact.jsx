@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, FlatList, Image, Text, TextInput, Button, TouchableWithoutFeedback, StyleSheet } from 'react-native';
 import { FontAwesome, Entypo } from '@expo/vector-icons';
-import { getState } from '../../context/StateContext.js';
+import { getState } from '../../../context/StateContext.js';
 
 export default function NewContact() {
 
@@ -11,7 +11,7 @@ export default function NewContact() {
 
     const searchHandle = async () => {
         try {
-            let res = await fetch('http://10.0.10.58:4000/api/v1/users', {
+            let res = await fetch('http://192.168.0.57:4000/api/v1/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export default function NewContact() {
 
     const handleContact = async ({ id, task }) => {
         try {
-            let res = await fetch(`http://10.0.10.58:4000/api/v1/user/${id}`, {
+            let res = await fetch(`http://192.168.0.57:4000/api/v1/user/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

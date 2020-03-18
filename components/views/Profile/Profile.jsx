@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, StyleSheet, Text, Image, View } from 'react-native';
 
-import { getState } from '../../context/StateContext.js';
+import { getState } from '../../../context/StateContext.js';
 
 export default function Profile() {
 

@@ -50,7 +50,7 @@ export default function ChatStack(props) {
                 }}
             >
                 <Stack.Screen name='ChatList' component={ChatList} options={{ title: 'Commentz' }} />
-                <Stack.Screen name='NewChat' component={NewChat} />
+                <Stack.Screen name='NewChat' component={NewChat} options={{ title: 'Select a Contact' }} />
                 <Stack.Screen
                     name='ChatDetail'
                     component={ChatDetail}
