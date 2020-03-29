@@ -1,7 +1,3 @@
-//USED TO GENERATE FAKE DATA
-import { generateChat } from '../utils/fakeData.js';
-//USED TO GENERATE FAKE DATA
-
 export default function reducer(state, action) {
     switch (action.type) {
         case 'AUTH_SIGNIN_ATTEMPT':
@@ -15,7 +11,7 @@ export default function reducer(state, action) {
                 ...state,
                 loading: false,
                 error: '',
-                socket: new WebSocket('ws://192.168.0.57:6000'),
+                socket: new WebSocket('ws://10.0.10.58:6000'),
                 authed: action.payload.authenticated,
                 chats: [],
                 currentUser: {
@@ -45,7 +41,7 @@ export default function reducer(state, action) {
                 ...state,
                 loading: false,
                 error: '',
-                socket: new WebSocket('ws://192.168.0.57:6000'),
+                socket: new WebSocket('ws://10.0.10.58:6000'),
                 authed: action.payload.authenticated,
                 chats: [],
                 currentUser: {

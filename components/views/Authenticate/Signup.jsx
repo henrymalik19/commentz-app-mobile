@@ -50,7 +50,7 @@ export default function Signup(props) {
         dispatch({ type: 'AUTH_SIGNUP_ATTEMPT' });
 
         try {
-            let res = await fetch('http://192.168.0.57:4000/api/v1/signup', {
+            let res = await fetch('http://10.0.10.58:4000/api/v1/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
